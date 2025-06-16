@@ -1,14 +1,43 @@
 .canvasContainer {
-  width: 100vw;
+  width: 60vw;
   height: 100vh;
-  background-color: #060010; /* dark space background */
   display: flex;
   align-items: center;
   justify-content: center;
   overflow: hidden;
+  flex-direction: column;
+}
+
+.simulationContainer{
+    background-color: #060010; /* dark space background */
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    position: relative;
 }
 
 .canvas {
   width: 100%;
   height: 100%;
+}
+
+.toolbox{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    border: 2px solid red;
+    margin-bottom: 20px;
+}
+
+.toolbox button {
+    margin: 0 10px;
+    padding: 5px 5px;
+    font-size: 16px;
+    cursor: pointer;
+    background-color: #282c34;
+    color: white;
+    border: none;
+    border-radius: 5px;
 }
