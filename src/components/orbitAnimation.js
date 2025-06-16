@@ -1,23 +1,31 @@
 import { useEffect, useRef, useState } from 'react';
 
-const OrbitAnimation = (isPlaying) => {
+const OrbitAnimation = (isPlaying, speed = 1) => {
   const [elapsedTime, setElapsedTime] = useState(0);
   const requestRef = useRef();
+  const previousTimeRef = useRef();
+
 
   const animate = (time) => {
-    setElapsedTime((prev) => prev + 1); // could use deltaTime for precision
+    if (previousTimeRef.current != null) {
+      const deltaTime = time - previousTimeRef.current;
+      setElapsedTime((prev) => prev + deltaTime * 0.001 * speed); // seconds * speed
+    }
+    previousTimeRef.current = time;
     requestRef.current = requestAnimationFrame(animate);
   };
+
 
   useEffect(() => {
     if (isPlaying) {
       requestRef.current = requestAnimationFrame(animate);
     } else {
       cancelAnimationFrame(requestRef.current);
+      previousTimeRef.current = null;
     }
 
     return () => cancelAnimationFrame(requestRef.current);
-  }, [isPlaying]);
+  }, [isPlaying, speed]);
 
   return elapsedTime;
 };

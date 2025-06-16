@@ -5,6 +5,8 @@ import Tooltip from "./tooltip";
 import OrbitAnimation from "./orbitAnimation";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import PauseIcon from "@mui/icons-material/Pause";
+import FastForwardIcon from "@mui/icons-material/FastForward";
+import FastRewindIcon from "@mui/icons-material/FastRewind";
 
 const CANVAS_CENTER = { x: 500, y: 500 }; // Based on viewBox 1000x1000
 
@@ -13,8 +15,11 @@ const Canvas = () => {
   const [selectedPlanet, setSelectedPlanet] = useState(null);
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 }); // State to track mouse position for tooltip
   const [isPlaying, setIsPlaying] = useState(true); //state to control animation playback
+  const [displaySpeed, setDisplaySpeed] = useState(1); // 1x by default
+  const BASE_MULTIPLIER = 32; // base speed multiplier   ********keep it high, low speed is quite slow*********
 
-  const elapsedTime = OrbitAnimation(isPlaying);
+  const speed = BASE_MULTIPLIER * displaySpeed; // Adjust speed based on user input
+  const elapsedTime = OrbitAnimation(isPlaying, speed);
 
   // Event listener to update mouse position
   const handleMouseMove = (e) => {
@@ -97,6 +102,19 @@ const Canvas = () => {
         </svg>
         {/* below is the Toolbox of all button  */}
         <div className="toolbox">
+          {/* to display speed to user */}
+          <span style={{ marginLeft: "10px", color: "white" }}>
+            {displaySpeed}x
+          </span>
+
+          {/* Rewind Button */}
+          <button
+            onClick={() => setDisplaySpeed((prev) => Math.max(0.25, prev / 2))} // dividing speed by 2 to slow down
+            title="Slow Down"
+          >
+            <FastRewindIcon fontSize="small" />
+          </button>
+
           {/* Play & Pause Button */}
           <button onClick={() => setIsPlaying(!isPlaying)}>
             {isPlaying ? (
@@ -104,6 +122,14 @@ const Canvas = () => {
             ) : (
               <PlayArrowIcon fontSize="small" />
             )}
+          </button>
+
+          {/* Fast Forward Button */}
+          <button
+            onClick={() => setDisplaySpeed((prev) => Math.min(16, prev * 2))} // multpying speed by 2
+            title="Speed Up"
+          >
+            <FastForwardIcon fontSize="small" />
           </button>
         </div>
       </div>

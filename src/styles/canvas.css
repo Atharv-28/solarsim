@@ -27,17 +27,25 @@
     flex-direction: row;
     justify-content: center;
     align-items: center;
-    border: 2px solid red;
     margin-bottom: 20px;
+    gap: 0px;
+    background-color: #282c34;
 }
 
 .toolbox button {
-    margin: 0 10px;
-    padding: 5px 5px;
+    /* margin: 0 10px; */
+    padding: 5px 10px;
     font-size: 16px;
     cursor: pointer;
     background-color: #282c34;
     color: white;
-    border: none;
-    border-radius: 5px;
+}
+
+.toolbox button:hover {
+    background-color: #3c4043;
+    color: black;
+}
+
+.toolbox span{
+    margin:0 10px;
 }
