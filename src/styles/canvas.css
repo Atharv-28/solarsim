@@ -1,0 +1,14 @@
+.canvasContainer {
+  width: 100vw;
+  height: 100vh;
+  background-color: #060010; /* dark space background */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.canvas {
+  width: 100%;
+  height: 100%;
+}

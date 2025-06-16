@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './App.css';
 import Loader from './components/loader';
+import Canvas from './components/canvas';
 
 function App() {
   const [isLoading, setIsLoading] = useState(true);
@@ -19,10 +20,7 @@ function App() {
       {isLoading ? (
         <Loader />
       ) : (
-        <header className="App-header">
-          <h1>Welcome to Solar-Sim</h1>
-          
-        </header>
+        <Canvas />
       )}
     </div>
   );

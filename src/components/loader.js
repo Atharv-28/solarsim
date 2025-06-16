@@ -1,4 +1,4 @@
-import '../style/loader.css'
+import '../styles/loader.css'
 import logo from '../assets/logo_trans.png'
 
 const Loader = () => {
