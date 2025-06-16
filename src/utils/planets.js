@@ -1,0 +1,60 @@
+const planets = [
+  {
+    name: 'Mercury',
+    color: '#a9a9a9',
+    radius: 3,
+    distance: 50,
+    orbitalPeriod: 88,
+  },
+  {
+    name: 'Venus',
+    color: '#c2b280',
+    radius: 5,
+    distance: 80,
+    orbitalPeriod: 225,
+  },
+  {
+    name: 'Earth',
+    color: '#4e90d2',
+    radius: 6,
+    distance: 110,
+    orbitalPeriod: 365,
+  },
+  {
+    name: 'Mars',
+    color: '#d14f3f',
+    radius: 4,
+    distance: 140,
+    orbitalPeriod: 687,
+  },
+  {
+    name: 'Jupiter',
+    color: '#e0a96d',
+    radius: 10,
+    distance: 200,
+    orbitalPeriod: 4333,
+  },
+  {
+    name: 'Saturn',
+    color: '#d8c47d',
+    radius: 9,
+    distance: 260,
+    orbitalPeriod: 10759,
+  },
+  {
+    name: 'Uranus',
+    color: '#a6e7e8',
+    radius: 8,
+    distance: 320,
+    orbitalPeriod: 30687,
+  },
+  {
+    name: 'Neptune',
+    color: '#4b70dd',
+    radius: 8,
+    distance: 380,
+    orbitalPeriod: 60190,
+  },
+];
+
+export default planets;
