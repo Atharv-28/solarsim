@@ -4,7 +4,7 @@ import logo from '../assets/logo_trans.png'
 const Loader = () => {
   return (
     <div className='loader-container'>
-        // logo image which will rotate for loading animation
+        {/* logo image which will rotate for loading animation */}
         <img 
             src={logo}
             alt='Loading...'

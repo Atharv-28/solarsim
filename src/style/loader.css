@@ -5,7 +5,7 @@
   align-items: center;
   height: 100vh;
   width: 100vw;
-  background-color: #282c34;
+  background-color: #060010; 
   color: white;
 }
 
@@ -14,12 +14,12 @@
 }
 
 .loader {
-  width: 15vw; 
+  width: 15vw;
   height: 15vw;
   animation: spin 3s linear infinite;
 }
 
-/* Loading Animation of that image */
+/* Loading Animation of the image */
 @keyframes spin {
   0% {
     transform: rotate(0deg);
@@ -27,4 +27,11 @@
   100% {
     transform: rotate(360deg);
   }
+}
+
+@media screen and (max-width: 600px) {
+  .loader {
+    width: 50vw;
+    height: 50vw;
+  } 
 }
