@@ -6,6 +6,7 @@ const planets = [
     distance: 50,
     orbitalPeriod: 88,
     eccentricity: 0.206,
+    img: "https://science.nasa.gov/wp-content/uploads/2024/03/pia15162-mercury-basins-messenger-16x9-1.jpg?resize=400,225"
   },
   {
     name: 'Venus',
@@ -14,6 +15,8 @@ const planets = [
     distance: 80,
     orbitalPeriod: 225,
     eccentricity: 0.007,
+    img: "https://science.nasa.gov/wp-content/uploads/2024/03/venus-mariner-10-pia23791-fig2-16x9-1.jpg?resize=400,225"
+    
   },
   {
     name: 'Earth',
@@ -22,6 +25,7 @@ const planets = [
     distance: 110,
     orbitalPeriod: 365,
     eccentricity: 0.017,
+    img: "https://science.nasa.gov/wp-content/uploads/2024/03/blue-marble-apollo-17-16x9-1.jpg?resize=400,225"
   },
   {
     name: 'Mars',
@@ -30,6 +34,7 @@ const planets = [
     distance: 140,
     orbitalPeriod: 687,
     eccentricity: 0.093,
+    img: "https://science.nasa.gov/wp-content/uploads/2024/03/mars-full-globe-16x9-1.jpg?resize=400,225"
   },
   {
     name: 'Jupiter',
@@ -38,6 +43,7 @@ const planets = [
     distance: 200,
     orbitalPeriod: 4333,
     eccentricity: 0.049,
+    img: "https://science.nasa.gov/wp-content/uploads/2024/03/jupiter-marble-pia22946-16x9-1.jpg?resize=400,225"
   },
   {
     name: 'Saturn',
@@ -46,6 +52,7 @@ const planets = [
     distance: 260,
     orbitalPeriod: 10759,
     eccentricity: 0.057,
+    img: "https://science.nasa.gov/wp-content/uploads/2023/05/saturn-farewell-pia21345-sse-banner-1920x640-1.jpg?resize=400,133"
   },
   {
     name: 'Uranus',
@@ -54,6 +61,7 @@ const planets = [
     distance: 320,
     orbitalPeriod: 30687,
     eccentricity: 0.046,
+    img: "https://science.nasa.gov/wp-content/uploads/2024/03/uranus-pia18182-16x9-1.jpg?resize=400,225"
   },
   {
     name: 'Neptune',
@@ -62,6 +70,7 @@ const planets = [
     distance: 380,
     orbitalPeriod: 60190,
     eccentricity: 0.010,
+    img: "https://science.nasa.gov/wp-content/uploads/2024/03/pia01492-neptune-full-disk-16x9-1.jpg?resize=400,225"
   },
 ];
 
