@@ -18,13 +18,14 @@ const Canvas = () => {
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 }); // State to track mouse position for tooltip
   const [isPlaying, setIsPlaying] = useState(true); // State to control animation playback
   const [displaySpeed, setDisplaySpeed] = useState(1); // 1x by default
-  const BASE_MULTIPLIER = 32; // base speed multiplier   ********keep it high, low speed is quite slow*********
   const [elapsedTime, setElapsedTime] = useState(0); // State to track elapsed time
-
+  const [animationKey, setAnimationKey] = useState(0); // Key to reset animation
+  
+  const BASE_MULTIPLIER = 32; // base speed multiplier   ********keep it high, low speed is quite slow*********
   const speed = BASE_MULTIPLIER * displaySpeed; // Adjust speed based on user input
 
   // Custom hook for animation
-  const animationTime = OrbitAnimation(isPlaying, speed);
+  const animationTime = OrbitAnimation(isPlaying, speed, animationKey);
 
   // Update elapsed time when animation is playing
   React.useEffect(() => {
@@ -45,10 +46,12 @@ const Canvas = () => {
 
   // Reset function
   const handleReset = () => {
-    setElapsedTime(0); // Reset elapsed time to 0
-    setIsPlaying(false); // Pause the animation
-    setDisplaySpeed(1); // Reset speed to 1x
-  };
+  setAnimationKey((prevKey) => prevKey + 1);
+  setElapsedTime(0);
+  setDisplaySpeed(1);
+  setIsPlaying(true); // auto-play
+};
+
 
   return (
     <div className="simulationContainer">
