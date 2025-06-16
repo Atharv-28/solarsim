@@ -1,13 +1,17 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import "../styles/canvas.css";
 import planets from "../utils/planets";
 import Tooltip from "./tooltip";
+import OrbitAnimation from "./orbitAnimation";
 
 const CANVAS_CENTER = { x: 500, y: 500 }; // Based on viewBox 1000x1000
 
 const Canvas = () => {
   const [hoveredPlanet, setHoveredPlanet] = useState(null); //  State to track which planet is hovered
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 }); // State to track mouse position for tooltip
+  const [isPlaying, setIsPlaying] = useState(true); //state to control animation playback
+
+  const elapsedTime = OrbitAnimation(isPlaying);
 
   // Event listener to update mouse position
   const handleMouseMove = (e) => {
@@ -53,7 +57,8 @@ const Canvas = () => {
 
         {/* Planets */}
         {planets.map((planet, index) => {
-          const angle = (2 * Math.PI * index) / planets.length; // even spacing for now
+          const orbitalProgress = (elapsedTime % planet.orbitalPeriod) / planet.orbitalPeriod;
+          const angle = orbitalProgress * 2 * Math.PI; // Calculate angle based on elapsed time
           const rx = planet.distance;
           const ry = planet.distance * (1 - planet.eccentricity); // orbit shape
           const cx = CANVAS_CENTER.x + planet.distance * planet.eccentricity; // Focus shift
@@ -77,6 +82,22 @@ const Canvas = () => {
 
       {/* Tooltip to show info on hover/click */}
       <Tooltip x={mousePos.x} y={mousePos.y} planet={hoveredPlanet} />
+      <button
+        style={{
+          position: 'absolute',
+          bottom: 10,
+          left: "48%",
+          zIndex: 10,
+          padding: '10px 15px',
+          background: '#fff',
+          border: 'none',
+          borderRadius: '6px',
+          cursor: 'pointer',
+        }}
+        onClick={() => setIsPlaying(!isPlaying)}
+      >
+        {isPlaying ? 'Pause' : 'Play'}
+      </button>
     </div>
   );
 };
