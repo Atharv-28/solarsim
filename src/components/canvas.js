@@ -8,6 +8,7 @@ import PauseIcon from "@mui/icons-material/Pause";
 import FastForwardIcon from "@mui/icons-material/FastForward";
 import FastRewindIcon from "@mui/icons-material/FastRewind";
 import ReplayIcon from "@mui/icons-material/Replay";
+import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 
 const CANVAS_CENTER = { x: 500, y: 500 }; // Based on viewBox 1000x1000
 const EARTH_ORBITAL_PERIOD = 365; // Earth's orbital period in days
@@ -63,71 +64,97 @@ const Canvas = () => {
         />
       </div>
       <div className="canvasContainer">
-        <svg
-          className="canvas"
-          viewBox="0 0 1000 1000"
-          xmlns="http://www.w3.org/2000/svg"
-          onClick={() => setSelectedPlanet(null)} // Deselect when background clicked
+        <TransformWrapper
+          initialScale={1}
+          minScale={0.5}
+          maxScale={5}
+          wheel={{ disabled: false }}
+          doubleClick={{ disabled: true }}
+          pinch={{ disabled: false }}
+          className="transform-wrapper"
         >
-          {/* Sun */}
-          <circle
-            cx={CANVAS_CENTER.x}
-            cy={CANVAS_CENTER.y}
-            r="20"
-            fill="yellow"
-          />
+          {({ zoomIn, zoomOut, resetTransform }) => (
+            <>
+              {/* Optional: Add Zoom Controls */}
+              <div className="zoom-controls">
+                <button onClick={zoomIn}>+</button>
+                <button onClick={zoomOut}>-</button>
+                <button onClick={resetTransform}>Reset View</button>
+              </div>
 
-          {/* Orbits */}
-          {planets.map((planet) => {
-            const rx = planet.distance;
-            const ry = planet.distance * (1 - planet.eccentricity); // Orbit shape
-            const cx = CANVAS_CENTER.x + planet.distance * planet.eccentricity; // Focus shift
-            const cy = CANVAS_CENTER.y;
+              <TransformComponent className="transform-wrapper">
+                <svg
+                  className="canvas"
+                  viewBox="0 0 1000 1000"
+                  xmlns="http://www.w3.org/2000/svg"
+                  onClick={() => setSelectedPlanet(null)} // Deselect when background clicked
+                >
+                  {/* Sun */}
+                  <circle
+                    cx={CANVAS_CENTER.x}
+                    cy={CANVAS_CENTER.y}
+                    r="20"
+                    fill="yellow"
+                  />
 
-            return (
-              <ellipse
-                key={`${planet.name}-orbit`}
-                cx={cx}
-                cy={cy}
-                rx={rx}
-                ry={ry}
-                fill="none"
-                stroke="white"
-                strokeOpacity={0.1}
-                strokeDasharray="4 4"
-              />
-            );
-          })}
+                  {/* Orbits */}
+                  {planets.map((planet) => {
+                    const rx = planet.distance;
+                    const ry = planet.distance * (1 - planet.eccentricity); // Orbit shape
+                    const cx =
+                      CANVAS_CENTER.x + planet.distance * planet.eccentricity; // Focus shift
+                    const cy = CANVAS_CENTER.y;
 
-          {/* Planets */}
-          {planets.map((planet, index) => {
-            const orbitalProgress =
-              (elapsedTime % planet.orbitalPeriod) / planet.orbitalPeriod;
-            const angle = orbitalProgress * 2 * Math.PI; // Calculate angle based on elapsed time
-            const rx = planet.distance;
-            const ry = planet.distance * (1 - planet.eccentricity); // Orbit shape
-            const cx = CANVAS_CENTER.x + planet.distance * planet.eccentricity; // Focus shift
-            const cy = CANVAS_CENTER.y;
-            const x = cx + rx * Math.cos(angle);
-            const y = cy + ry * Math.sin(angle);
+                    return (
+                      <ellipse
+                        key={`${planet.name}-orbit`}
+                        cx={cx}
+                        cy={cy}
+                        rx={rx}
+                        ry={ry}
+                        fill="none"
+                        stroke="white"
+                        strokeOpacity={0.1}
+                        strokeDasharray="4 4"
+                      />
+                    );
+                  })}
 
-            return (
-              <circle
-                key={planet.name}
-                cx={x}
-                cy={y}
-                r={planet.radius}
-                fill={planet.color}
-                onMouseEnter={() => setHoveredPlanet(planet)}
-                onMouseLeave={() => setHoveredPlanet(null)}
-                onClick={(e) => {
-                  e.stopPropagation(); // Prevents SVG background click from firing
-                  setSelectedPlanet(planet);
-                }}
-              />
-            );
-          })}
-        </svg>
+                  {/* Planets */}
+                  {planets.map((planet, index) => {
+                    const orbitalProgress =
+                      (elapsedTime % planet.orbitalPeriod) /
+                      planet.orbitalPeriod;
+                    const angle = orbitalProgress * 2 * Math.PI; // Calculate angle based on elapsed time
+                    const rx = planet.distance;
+                    const ry = planet.distance * (1 - planet.eccentricity); // Orbit shape
+                    const cx =
+                      CANVAS_CENTER.x + planet.distance * planet.eccentricity; // Focus shift
+                    const cy = CANVAS_CENTER.y;
+                    const x = cx + rx * Math.cos(angle);
+                    const y = cy + ry * Math.sin(angle);
+
+                    return (
+                      <circle
+                        key={planet.name}
+                        cx={x}
+                        cy={y}
+                        r={planet.radius}
+                        fill={planet.color}
+                        onMouseEnter={() => setHoveredPlanet(planet)}
+                        onMouseLeave={() => setHoveredPlanet(null)}
+                        onClick={(e) => {
+                          e.stopPropagation(); // Prevents SVG background click from firing
+                          setSelectedPlanet(planet);
+                        }}
+                      />
+                    );
+                  })}
+                </svg>
+              </TransformComponent>
+            </>
+          )}
+        </TransformWrapper>
         {/* below is the Toolbox of all button  */}
         <div className="toolbox">
           {/* Reset Button */}
