@@ -6,15 +6,29 @@
   justify-content: center;
   overflow: hidden;
   flex-direction: column;
+  width: 50vw;
+  border: 2px solid green;
 }
 
 .simulationContainer{
     background-color: #060010; /* dark space background */
     display: flex;
     flex-direction: row;
+    /* align-items: center; */
+    /* justify-content: center; */
+    position: relative;
+    padding: 0;
+    margin: 0;
+    border: 2px solid red;
+}
+
+.tooltipContainer{
+    width: 25vw;
+    border: 2px solid blue;
+    display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
-    position: relative;
 }
 
 .canvas {
@@ -48,4 +62,28 @@
 
 .toolbox span{
     margin:0 10px;
+}
+
+
+@media screen and (max-width: 800px) {
+    .simulationContainer {
+        flex-direction: column;
+        align-items: center;
+        height: 100vh;
+    }
+
+    .canvasContainer {
+        width: 90vw;
+        height: 50vh;
+    }
+
+    .tooltipContainer {
+        width: 90vw;
+        height: 25vh;
+    }
+
+    .toolbox {
+        flex-direction: row;
+        align-items: center;
+    }
 }

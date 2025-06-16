@@ -1,5 +1,5 @@
-import React from 'react';
-import '../styles/tooltip.css'; 
+import React from "react";
+import "../styles/tooltip.css";
 
 const Tooltip = ({ x, y, planet }) => {
   if (!planet) return null;
@@ -12,11 +12,13 @@ const Tooltip = ({ x, y, planet }) => {
   return (
     <div className="tooltip" style={style}>
       <img src={planet.img} alt={planet.name} className="planet-image" />
-      <strong>{planet.name}</strong>
-      <div>Distance: {planet.distance} units</div>
-      <div>Orbital Period: {planet.orbitalPeriod} days</div>
-      <div>Eccentricity: {planet.eccentricity}</div>
-      <div>Radius: {planet.radius}</div>
+      <div>
+        <strong>{planet.name}</strong>
+        <div>Distance: {planet.distance} units</div>
+        <div>Orbital Period: {planet.orbitalPeriod} days</div>
+        <div>Eccentricity: {planet.eccentricity}</div>
+        <div>Radius: {planet.radius}</div>
+      </div>
     </div>
   );
 };

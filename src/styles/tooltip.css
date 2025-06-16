@@ -1,39 +1,50 @@
 .tooltip {
-  position: absolute;
-  left: 0;
+  /*position: absolute;
   transform: translateY(75%);
-  
-  background-color: rgba(255, 255, 255, 0.95);
+*/
+  background-color: #fff;
   color: #000;
   padding: 8px 12px;
   border-radius: 8px;
-  box-shadow: 0 0 6px rgba(0, 0, 0, 0.25);
   font-size: 13px;
-  pointer-events: none;
-  z-index: 1000;
+  z-index: 1;
+
   display: flex;
   flex-direction: column;
   align-items: center;
   width: max-content;
 }
 
-
-.planet-image{
-    min-height: 25vh;
-    max-width: 20vw;
+.planet-image {
+  min-height: 25vh;
+  max-width: 20vw;
 }
-
 
 @media screen and (max-width: 600px) {
   .tooltip {
-    margin-left: 20%;
-    margin-top: 25%;
+    /* transform: translateX(-25%);
+    transform: translateY(80%); */
+    font-size: 12px;
+    padding: 6px 10px;
+    flex-direction: row;
+  }
+
+  .planet-image {
+    min-height: 15vh;
+    max-width: 40vw;
+  }
+}
+
+@media screen and (max-width: 800px) {
+  .tooltip {
+    /* margin-left: 25%;
+    margin-top: -15vh; */
     font-size: 12px;
     padding: 6px 10px;
   }
-  
+
   .planet-image {
+    min-height: 15vh;
     max-width: 40vw;
   }
-    
 }

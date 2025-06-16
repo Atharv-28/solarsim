@@ -20,7 +20,7 @@ const Canvas = () => {
   const [displaySpeed, setDisplaySpeed] = useState(1); // 1x by default
   const [elapsedTime, setElapsedTime] = useState(0); // State to track elapsed time
   const [animationKey, setAnimationKey] = useState(0); // Key to reset animation
-  
+
   const BASE_MULTIPLIER = 32; // base speed multiplier   ********keep it high, low speed is quite slow*********
   const speed = BASE_MULTIPLIER * displaySpeed; // Adjust speed based on user input
 
@@ -46,21 +46,22 @@ const Canvas = () => {
 
   // Reset function
   const handleReset = () => {
-  setAnimationKey((prevKey) => prevKey + 1);
-  setElapsedTime(0);
-  setDisplaySpeed(1);
-  setIsPlaying(true); // auto-play
-};
-
+    setAnimationKey((prevKey) => prevKey + 1);
+    setElapsedTime(0);
+    setDisplaySpeed(1);
+    setIsPlaying(true); // auto-play
+  };
 
   return (
     <div className="simulationContainer">
-      {/* Tooltip to show info on hover/click */}
-      <Tooltip
-        x={mousePos.x}
-        y={mousePos.y}
-        planet={hoveredPlanet || selectedPlanet}
-      />
+      <div className="tooltipContainer">
+        {/* Tooltip to show info on hover/click */}
+        <Tooltip
+          x={mousePos.x}
+          y={mousePos.y}
+          planet={hoveredPlanet || selectedPlanet}
+        />
+      </div>
       <div className="canvasContainer">
         <svg
           className="canvas"
@@ -129,8 +130,7 @@ const Canvas = () => {
         </svg>
         {/* below is the Toolbox of all button  */}
         <div className="toolbox">
-
-            {/* Reset Button */}
+          {/* Reset Button */}
           <button onClick={handleReset} title="Reset">
             <ReplayIcon fontSize="small" />
           </button>
