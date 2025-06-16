@@ -7,23 +7,47 @@ import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import PauseIcon from "@mui/icons-material/Pause";
 import FastForwardIcon from "@mui/icons-material/FastForward";
 import FastRewindIcon from "@mui/icons-material/FastRewind";
+import ReplayIcon from "@mui/icons-material/Replay";
 
 const CANVAS_CENTER = { x: 500, y: 500 }; // Based on viewBox 1000x1000
+const EARTH_ORBITAL_PERIOD = 365; // Earth's orbital period in days
 
 const Canvas = () => {
   const [hoveredPlanet, setHoveredPlanet] = useState(null);
   const [selectedPlanet, setSelectedPlanet] = useState(null);
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 }); // State to track mouse position for tooltip
-  const [isPlaying, setIsPlaying] = useState(true); //state to control animation playback
+  const [isPlaying, setIsPlaying] = useState(true); // State to control animation playback
   const [displaySpeed, setDisplaySpeed] = useState(1); // 1x by default
   const BASE_MULTIPLIER = 32; // base speed multiplier   ********keep it high, low speed is quite slow*********
+  const [elapsedTime, setElapsedTime] = useState(0); // State to track elapsed time
 
   const speed = BASE_MULTIPLIER * displaySpeed; // Adjust speed based on user input
-  const elapsedTime = OrbitAnimation(isPlaying, speed);
+
+  // Custom hook for animation
+  const animationTime = OrbitAnimation(isPlaying, speed);
+
+  // Update elapsed time when animation is playing
+  React.useEffect(() => {
+    if (isPlaying) {
+      setElapsedTime(animationTime);
+    }
+  }, [animationTime, isPlaying]);
+
+  // Calculate the number of days elapsed
+  const daysElapsed = Math.floor(
+    (elapsedTime / EARTH_ORBITAL_PERIOD) * EARTH_ORBITAL_PERIOD
+  );
 
   // Event listener to update mouse position
   const handleMouseMove = (e) => {
     setMousePos({ x: e.clientX, y: e.clientY });
+  };
+
+  // Reset function
+  const handleReset = () => {
+    setElapsedTime(0); // Reset elapsed time to 0
+    setIsPlaying(false); // Pause the animation
+    setDisplaySpeed(1); // Reset speed to 1x
   };
 
   return (
@@ -52,7 +76,7 @@ const Canvas = () => {
           {/* Orbits */}
           {planets.map((planet) => {
             const rx = planet.distance;
-            const ry = planet.distance * (1 - planet.eccentricity); // orbit shape
+            const ry = planet.distance * (1 - planet.eccentricity); // Orbit shape
             const cx = CANVAS_CENTER.x + planet.distance * planet.eccentricity; // Focus shift
             const cy = CANVAS_CENTER.y;
 
@@ -77,7 +101,7 @@ const Canvas = () => {
               (elapsedTime % planet.orbitalPeriod) / planet.orbitalPeriod;
             const angle = orbitalProgress * 2 * Math.PI; // Calculate angle based on elapsed time
             const rx = planet.distance;
-            const ry = planet.distance * (1 - planet.eccentricity); // orbit shape
+            const ry = planet.distance * (1 - planet.eccentricity); // Orbit shape
             const cx = CANVAS_CENTER.x + planet.distance * planet.eccentricity; // Focus shift
             const cy = CANVAS_CENTER.y;
             const x = cx + rx * Math.cos(angle);
@@ -102,14 +126,20 @@ const Canvas = () => {
         </svg>
         {/* below is the Toolbox of all button  */}
         <div className="toolbox">
-          {/* to display speed to user */}
+
+            {/* Reset Button */}
+          <button onClick={handleReset} title="Reset">
+            <ReplayIcon fontSize="small" />
+          </button>
+
+          {/* Display speed to user */}
           <span style={{ marginLeft: "10px", color: "white" }}>
             {displaySpeed}x
           </span>
 
           {/* Rewind Button */}
           <button
-            onClick={() => setDisplaySpeed((prev) => Math.max(0.25, prev / 2))} // dividing speed by 2 to slow down
+            onClick={() => setDisplaySpeed((prev) => Math.max(0.25, prev / 2))} // Dividing speed by 2 to slow down
             title="Slow Down"
           >
             <FastRewindIcon fontSize="small" />
@@ -126,11 +156,16 @@ const Canvas = () => {
 
           {/* Fast Forward Button */}
           <button
-            onClick={() => setDisplaySpeed((prev) => Math.min(16, prev * 2))} // multpying speed by 2
+            onClick={() => setDisplaySpeed((prev) => Math.min(16, prev * 2))} // Multiplying speed by 2
             title="Speed Up"
           >
             <FastForwardIcon fontSize="small" />
           </button>
+
+          {/* Display elapsed days */}
+          <span style={{ marginLeft: "10px", color: "white" }}>
+            Days: {daysElapsed}
+          </span>
         </div>
       </div>
     </div>
