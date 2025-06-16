@@ -5,6 +5,7 @@ const planets = [
     radius: 3,
     distance: 50,
     orbitalPeriod: 88,
+    eccentricity: 0.206,
   },
   {
     name: 'Venus',
@@ -12,6 +13,7 @@ const planets = [
     radius: 5,
     distance: 80,
     orbitalPeriod: 225,
+    eccentricity: 0.007,
   },
   {
     name: 'Earth',
@@ -19,6 +21,7 @@ const planets = [
     radius: 6,
     distance: 110,
     orbitalPeriod: 365,
+    eccentricity: 0.017,
   },
   {
     name: 'Mars',
@@ -26,6 +29,7 @@ const planets = [
     radius: 4,
     distance: 140,
     orbitalPeriod: 687,
+    eccentricity: 0.093,
   },
   {
     name: 'Jupiter',
@@ -33,6 +37,7 @@ const planets = [
     radius: 10,
     distance: 200,
     orbitalPeriod: 4333,
+    eccentricity: 0.049,
   },
   {
     name: 'Saturn',
@@ -40,6 +45,7 @@ const planets = [
     radius: 9,
     distance: 260,
     orbitalPeriod: 10759,
+    eccentricity: 0.057,
   },
   {
     name: 'Uranus',
@@ -47,6 +53,7 @@ const planets = [
     radius: 8,
     distance: 320,
     orbitalPeriod: 30687,
+    eccentricity: 0.046,
   },
   {
     name: 'Neptune',
@@ -54,6 +61,7 @@ const planets = [
     radius: 8,
     distance: 380,
     orbitalPeriod: 60190,
+    eccentricity: 0.010,
   },
 ];
 
