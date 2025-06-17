@@ -6,7 +6,6 @@ import Trails from "./trails";
 import Orbits from "./orbits";
 import Planets from "./planets";
 import Toolbox from "./toolbox";
-// import ZoomControls from "./zoomControls";
 import ZoomInIcon from "@mui/icons-material/ZoomIn";
 import ZoomOutIcon from "@mui/icons-material/ZoomOut";
 import CropFreeIcon from "@mui/icons-material/CropFree";
@@ -62,25 +61,6 @@ const Canvas = () => {
     clearTrails(); // Clear trails
   };
 
-  const ZoomControls = () => {
-    const { zoomIn, zoomOut, resetTransform } = useControls();
-
-    /* Zoom Controls */
-    return (
-      <div className="zoom-controls">
-        <button onClick={() => zoomIn()} title="Zoom In">
-          <ZoomInIcon fontSize="small" />
-        </button>
-        <button onClick={() => zoomOut()} title="Zoom Out">
-          <ZoomOutIcon fontSize="small" />
-        </button>
-        <button onClick={() => resetTransform()} title="Reset View">
-          <CropFreeIcon fontSize="small" />
-        </button>
-      </div>
-    );
-  };
-
   return (
     <div className="simulationContainer">
       <div className="tooltipContainer">
@@ -92,7 +72,7 @@ const Canvas = () => {
         />
       </div>
       <div className="canvasContainer">
-         <TransformWrapper
+        <TransformWrapper
           initialScale={1}
           initialPositionX={0}
           initialPositionY={0}
@@ -105,7 +85,21 @@ const Canvas = () => {
         >
           {({ zoomIn, zoomOut, resetTransform, ...rest }) => (
             <>
-              <ZoomControls />
+            {/*  ******************      Do Not Modularize zoom-controls          *********************  */}
+              <div className="zoom-controls">
+                <button onClick={() => zoomIn()} title="Zoom In">
+                  <ZoomInIcon fontSize="small" />
+                </button>
+                <button onClick={() => zoomOut()} title="Zoom Out">
+                  <ZoomOutIcon fontSize="small" />
+                </button>
+                <button onClick={() => resetTransform()} title="Reset View">
+                  <CropFreeIcon fontSize="small" />
+                </button>
+              </div>
+
+
+              {/*     Rendering the canvas in transform components for zoom & pan feature     */}
               <TransformComponent>
                 <svg
                   className="canvas"
@@ -116,10 +110,11 @@ const Canvas = () => {
                     setMousePos({ x: e.clientX, y: e.clientY })
                   } // Update mouse position for tooltip
                 >
-                  <Sun />
-                  <Trails trails={trails} trailOpacity={trailOpacity} />
-                  <Orbits />
-                  <Planets
+                  <Sun /> // sun
+                  <Trails trails={trails} trailOpacity={trailOpacity} /> //
+                  trails
+                  <Orbits /> // orbits
+                  <Planets // planets
                     elapsedTime={elapsedTime}
                     setHoveredPlanet={setHoveredPlanet}
                     setSelectedPlanet={setSelectedPlanet}
