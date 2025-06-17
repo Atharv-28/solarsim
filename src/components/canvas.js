@@ -29,6 +29,7 @@ const Canvas = () => {
   const [elapsedTime, setElapsedTime] = useState(0); // State to track elapsed time
   const [animationKey, setAnimationKey] = useState(0); // Key to reset animation
   const [trails, setTrails] = useState({}); // State to store trails for each planet
+  const [trailOpacity, setTrailOpacity] = useState(1); // State to control trail opacity
 
   const BASE_MULTIPLIER = 32; // Base speed multiplier
   const speed = BASE_MULTIPLIER * displaySpeed; // Adjust speed based on user input
@@ -40,6 +41,7 @@ const Canvas = () => {
   useEffect(() => {
     if (isPlaying) {
       setElapsedTime(animationTime);
+      setTrailOpacity(1); // Reset trail opacity when playing
     }
   }, [animationTime, isPlaying]);
 
@@ -56,6 +58,8 @@ const Canvas = () => {
 
   // Update trails as planets move
   useEffect(() => {
+    if (!isPlaying) return; // Do not update trails when paused
+
     const newTrails = { ...trails };
 
     planets.forEach((planet) => {
@@ -83,15 +87,34 @@ const Canvas = () => {
     });
 
     setTrails(newTrails);
-  }, [elapsedTime]);
+  }, [elapsedTime, isPlaying]);
+
+  // Fade trails when paused
+  useEffect(() => {
+    if (isPlaying) return; // Do not fade trails when playing
+
+    const fadeInterval = setInterval(() => {
+      setTrailOpacity((prev) => {
+        if (prev <= 0) {
+          clearInterval(fadeInterval);
+          setTrails({}); // Clear trails when fully faded
+          return 0;
+        }
+        return prev - 0.05; // Gradually decrease opacity
+      });
+    }, 100); // Adjust fading speed (100ms interval)
+
+    return () => clearInterval(fadeInterval); // Cleanup interval on unmount or play
+  }, [isPlaying]);
 
   // Reset function
   const handleReset = () => {
     setAnimationKey((prev) => prev + 1); // Increment animation key to reset
     setElapsedTime(0); // Reset elapsed time
     setDisplaySpeed(1); // Reset speed to 1x
-    setIsPlaying(true); // Auto-play after reset
+    setIsPlaying(false); // Pause after reset
     setTrails({}); // Clear trails
+    setTrailOpacity(1); // Reset trail opacity
   };
 
   // Zoom controls component
@@ -148,18 +171,14 @@ const Canvas = () => {
                 fill="yellow"
               />
 
-            
-           
-
-                {/* Trails */}
-
+              {/* Trails */}
               {planets.map((planet) => {
                 const trail = trails[planet.name];
-                // if (!trail || trail.length < 2) return null;
+                if (!trail || trail.length < 2) return null;
 
                 return trail.slice(1).map((point, i) => {
                   const prev = trail[i];
-                  const opacity = i / trail.length;
+                  const opacity = (i / trail.length) * trailOpacity; // Apply fading effect
 
                   return (
                     <line
