@@ -8,7 +8,14 @@ import PauseIcon from "@mui/icons-material/Pause";
 import FastForwardIcon from "@mui/icons-material/FastForward";
 import FastRewindIcon from "@mui/icons-material/FastRewind";
 import ReplayIcon from "@mui/icons-material/Replay";
-import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
+import ZoomInIcon from "@mui/icons-material/ZoomIn";
+import ZoomOutIcon from "@mui/icons-material/ZoomOut";
+import CropFreeIcon from "@mui/icons-material/CropFree";
+import {
+  TransformWrapper,
+  TransformComponent,
+  useControls,
+} from "react-zoom-pan-pinch";
 
 const CANVAS_CENTER = { x: 500, y: 500 }; // Based on viewBox 1000x1000
 const EARTH_ORBITAL_PERIOD = 365; // Earth's orbital period in days
@@ -21,6 +28,7 @@ const Canvas = () => {
   const [displaySpeed, setDisplaySpeed] = useState(1); // 1x by default
   const [elapsedTime, setElapsedTime] = useState(0); // State to track elapsed time
   const [animationKey, setAnimationKey] = useState(0); // Key to reset animation
+  //  const { zoomIn, zoomOut, resetTransform } = useControls(); // Controls for zooming and resetting the view by buttons only
 
   const BASE_MULTIPLIER = 32; // base speed multiplier   ********keep it high, low speed is quite slow*********
   const speed = BASE_MULTIPLIER * displaySpeed; // Adjust speed based on user input
@@ -53,6 +61,24 @@ const Canvas = () => {
     setIsPlaying(true); // auto-play
   };
 
+  const ZoomControls = () => {
+    const { zoomIn, zoomOut, resetTransform } = useControls();
+
+      /* Zoom Controls */
+    return (
+      <div className="zoom-controls">
+        <button onClick={() => zoomIn()} title="Zoom In">
+          <ZoomInIcon fontSize="small" />
+        </button>
+        <button onClick={() => zoomOut()} title="Zoom Out">
+          <ZoomOutIcon fontSize="small" />
+        </button>
+        <button onClick={() => resetTransform()} title="Reset View">
+          <CropFreeIcon fontSize="small" />
+        </button>
+      </div>
+    );
+  };
   return (
     <div className="simulationContainer">
       <div className="tooltipContainer">
@@ -66,6 +92,8 @@ const Canvas = () => {
       <div className="canvasContainer">
         <TransformWrapper
           initialScale={1}
+          initialPositionX={0}
+          initialPositionY={0}
           minScale={0.5}
           maxScale={5}
           wheel={{ disabled: false }}
@@ -73,16 +101,11 @@ const Canvas = () => {
           pinch={{ disabled: false }}
           className="transform-wrapper"
         >
-          {({ zoomIn, zoomOut, resetTransform }) => (
+          {({ zoomIn, zoomOut, resetTransform, ...rest }) => (
             <>
-              {/* Optional: Add Zoom Controls */}
-              <div className="zoom-controls">
-                <button onClick={zoomIn}>+</button>
-                <button onClick={zoomOut}>-</button>
-                <button onClick={resetTransform}>Reset View</button>
-              </div>
-
-              <TransformComponent className="transform-wrapper">
+              <ZoomControls />
+              {/* Canvas */}
+              <TransformComponent>
                 <svg
                   className="canvas"
                   viewBox="0 0 1000 1000"
