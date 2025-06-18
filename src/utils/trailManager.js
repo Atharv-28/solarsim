@@ -12,7 +12,7 @@ const TrailManager = (isPlaying, elapsedTime) => {
       newTrails[planetName].push(point);
 
       // Limit the trail length to a maximum value
-      const maxTrailLength = 100; // Adjust trail length as needed
+      const maxTrailLength = 150; // Adjust trail length as needed
       if (newTrails[planetName].length > maxTrailLength) {
         newTrails[planetName].shift();
       }

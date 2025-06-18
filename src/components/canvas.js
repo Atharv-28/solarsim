@@ -11,7 +11,7 @@ import ZoomOutIcon from "@mui/icons-material/ZoomOut";
 import CropFreeIcon from "@mui/icons-material/CropFree";
 
 import useOrbitAnimation from "./orbitAnimation";
-import useTrailManager from "../utils/trailManager";
+import TrailManager from "../utils/trailManager";
 import { CANVAS_CENTER, EARTH_ORBITAL_PERIOD } from "../utils/constants";
 import {
   TransformWrapper,
@@ -35,7 +35,7 @@ const Canvas = () => {
   const animationTime = useOrbitAnimation(isPlaying, speed, animationKey);
 
   // Custom hook for managing trails
-  const { trails, updateTrails, clearTrails, trailOpacity } = useTrailManager(
+  const { trails, updateTrails, clearTrails, trailOpacity } = TrailManager(
     isPlaying,
     elapsedTime
   );
@@ -74,8 +74,8 @@ const Canvas = () => {
       <div className="canvasContainer">
         <TransformWrapper
           initialScale={1}
-          initialPositionX={0}
-          initialPositionY={0}
+          initialPositionX={-CANVAS_CENTER.x + window.innerWidth / 2} // Center horizontally
+          initialPositionY={-CANVAS_CENTER.y + window.innerHeight / 2} // Center vertically
           minScale={0.5}
           maxScale={5}
           wheel={{ disabled: false }}
@@ -85,7 +85,7 @@ const Canvas = () => {
         >
           {({ zoomIn, zoomOut, resetTransform, ...rest }) => (
             <>
-            {/*  ******************      Do Not Modularize zoom-controls          *********************  */}
+              {/*  ******************      Do Not Modularize zoom-controls          *********************  */}
               <div className="zoom-controls">
                 <button onClick={() => zoomIn()} title="Zoom In">
                   <ZoomInIcon fontSize="small" />
@@ -97,7 +97,6 @@ const Canvas = () => {
                   <CropFreeIcon fontSize="small" />
                 </button>
               </div>
-
 
               {/*     Rendering the canvas in transform components for zoom & pan feature     */}
               <TransformComponent>
