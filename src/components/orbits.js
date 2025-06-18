@@ -1,8 +1,7 @@
 import React from "react";
-import planets from "../utils/planets";
 import { CANVAS_CENTER } from "../utils/constants";
 
-const Orbits = () => {
+const Orbits = ({ planets }) => {
   return (
     <>
       {planets.map((planet) => {

@@ -6,6 +6,7 @@ import Trails from "./trails";
 import Orbits from "./orbits";
 import Planets from "./planets";
 import Toolbox from "./toolbox";
+import PlanetManager from "./planetManager"; // Import the new component
 import ZoomInIcon from "@mui/icons-material/ZoomIn";
 import ZoomOutIcon from "@mui/icons-material/ZoomOut";
 import CropFreeIcon from "@mui/icons-material/CropFree";
@@ -13,11 +14,8 @@ import CropFreeIcon from "@mui/icons-material/CropFree";
 import useOrbitAnimation from "./orbitAnimation";
 import TrailManager from "../utils/trailManager";
 import { CANVAS_CENTER, EARTH_ORBITAL_PERIOD } from "../utils/constants";
-import {
-  TransformWrapper,
-  TransformComponent,
-  useControls,
-} from "react-zoom-pan-pinch";
+import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
+import initialPlanets from "../utils/planets"; // Import the initial planets
 
 const Canvas = () => {
   const [hoveredPlanet, setHoveredPlanet] = useState(null); // State to track hovered planet
@@ -27,6 +25,7 @@ const Canvas = () => {
   const [displaySpeed, setDisplaySpeed] = useState(1); // 1x by default
   const [elapsedTime, setElapsedTime] = useState(0); // State to track elapsed time
   const [animationKey, setAnimationKey] = useState(0); // Key to reset animation
+  const [planets, setPlanets] = useState(initialPlanets); // State to manage planets dynamically
 
   const BASE_MULTIPLIER = 32; // Base speed multiplier
   const speed = BASE_MULTIPLIER * displaySpeed; // Adjust speed based on user input
@@ -85,7 +84,7 @@ const Canvas = () => {
         >
           {({ zoomIn, zoomOut, resetTransform, ...rest }) => (
             <>
-              {/*  ******************      Do Not Modularize zoom-controls          *********************  */}
+              {/* Zoom Controls */}
               <div className="zoom-controls">
                 <button onClick={() => zoomIn()} title="Zoom In">
                   <ZoomInIcon fontSize="small" />
@@ -98,7 +97,7 @@ const Canvas = () => {
                 </button>
               </div>
 
-              {/*     Rendering the canvas in transform components for zoom & pan feature     */}
+              {/* Canvas */}
               <TransformComponent>
                 <svg
                   className="canvas"
@@ -109,11 +108,11 @@ const Canvas = () => {
                     setMousePos({ x: e.clientX, y: e.clientY })
                   } // Update mouse position for tooltip
                 >
-                  <Sun /> // sun
-                  <Trails trails={trails} trailOpacity={trailOpacity} /> //
-                  trails
-                  <Orbits /> // orbits
-                  <Planets // planets
+                  <Sun />
+                  <Trails trails={trails} trailOpacity={trailOpacity} />
+                  <Orbits planets={planets} /> {/* Pass planets dynamically */}
+                  <Planets
+                    planets={planets} // Pass planets dynamically
                     elapsedTime={elapsedTime}
                     setHoveredPlanet={setHoveredPlanet}
                     setSelectedPlanet={setSelectedPlanet}
@@ -133,6 +132,7 @@ const Canvas = () => {
           daysElapsed={daysElapsed}
         />
       </div>
+      <PlanetManager planets={planets} setPlanets={setPlanets} /> {/* Add PlanetManager */}
     </div>
   );
 };
