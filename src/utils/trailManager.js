@@ -5,16 +5,17 @@ const TrailManager = (isPlaying, elapsedTime) => {
   const [trailOpacity, setTrailOpacity] = useState(1); // State to control trail opacity
 
   // Function to update trails for a specific planet
-  const updateTrails = (planetName, point) => {
+  const updateTrails = (planetName, point, planetDistance) => {
     setTrails((prev) => {
       const newTrails = { ...prev };
       if (!newTrails[planetName]) newTrails[planetName] = [];
       newTrails[planetName].push(point);
 
-      // Limit the trail length to a maximum value
-      const maxTrailLength = 150; // Adjust trail length as needed
+      // Limit the trail length dynamically based on the planet's distance
+      const maxTrailLength = Math.floor(planetDistance)*1.25; // Trail length proportional to distance
+      
       if (newTrails[planetName].length > maxTrailLength) {
-        newTrails[planetName].shift();
+        newTrails[planetName].shift(); // Remove the oldest point
       }
 
       return newTrails;

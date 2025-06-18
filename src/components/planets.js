@@ -21,7 +21,8 @@ const Planets = ({
       const x = cx + rx * Math.cos(angle);
       const y = cy + ry * Math.sin(angle);
 
-      updateTrails(planet.name, { x, y }); // Update trails for the planet
+      // Pass planet.distance as the third argument
+      updateTrails(planet.name, { x, y }, planet.distance); // Update trails for the planet
     });
   }, [elapsedTime, updateTrails]); // Only run when elapsedTime changes
 
