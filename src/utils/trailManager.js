@@ -22,7 +22,16 @@ const TrailManager = (isPlaying, elapsedTime) => {
     });
   };
 
-  // Clear trails when paused or reset
+  // Function to remove a specific planet's trail
+  const removeTrail = (planetName) => {
+    setTrails((prev) => {
+      const newTrails = { ...prev };
+      delete newTrails[planetName]; // Remove the trail for the specified planet
+      return newTrails;
+    });
+  };
+
+  // Clear all trails when paused or reset
   const clearTrails = () => {
     setTrails({});
     setTrailOpacity(1); // Reset trail opacity
@@ -46,7 +55,7 @@ const TrailManager = (isPlaying, elapsedTime) => {
     return () => clearInterval(fadeInterval); // Cleanup interval on unmount or play
   }, [isPlaying]);
 
-  return { trails, updateTrails, clearTrails, trailOpacity };
+  return { trails, updateTrails, removeTrail, clearTrails, trailOpacity, removeTrail };
 };
 
 export default TrailManager;

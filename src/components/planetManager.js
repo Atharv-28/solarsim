@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import "../styles/planetManager.css";
 
-const PlanetManager = ({ planets, setPlanets }) => {
+const PlanetManager = ({ planets, setPlanets, removePlanetTrail }) => {
   const [newPlanet, setNewPlanet] = useState({
     name: "",
     color: "#ffffff",
@@ -40,6 +40,7 @@ const PlanetManager = ({ planets, setPlanets }) => {
 
   const removePlanet = (name) => {
     setPlanets((prev) => prev.filter((planet) => planet.name !== name));
+    removePlanetTrail(name); // Remove the trail of the deleted planet
   };
 
   return (
@@ -106,9 +107,7 @@ const PlanetManager = ({ planets, setPlanets }) => {
             onChange={handleInputChange}
           />
         </label>
-        <button className="add-button" onClick={addPlanet}>
-            Add Planet
-        </button>
+        <button onClick={addPlanet}>Add Planet</button>
       </div>
       <ul className="planet-list">
         <h3>Existing Planets</h3>

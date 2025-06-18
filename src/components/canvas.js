@@ -34,10 +34,7 @@ const Canvas = () => {
   const animationTime = useOrbitAnimation(isPlaying, speed, animationKey);
 
   // Custom hook for managing trails
-  const { trails, updateTrails, clearTrails, trailOpacity } = TrailManager(
-    isPlaying,
-    elapsedTime
-  );
+  const { trails, updateTrails, removeTrail, clearTrails, trailOpacity } = TrailManager(isPlaying, elapsedTime);
 
   // Update elapsed time when animation is playing
   useEffect(() => {
@@ -59,6 +56,12 @@ const Canvas = () => {
     setIsPlaying(false); // Pause after reset
     clearTrails(); // Clear trails
   };
+
+   // Function to remove a planet's trail
+  const removePlanetTrail = (planetName) => {
+    removeTrail(planetName); // Use the removeTrail function from TrailManager
+  };
+  
 
   return (
     <div className="simulationContainer">
@@ -132,7 +135,11 @@ const Canvas = () => {
           daysElapsed={daysElapsed}
         />
       </div>
-      <PlanetManager planets={planets} setPlanets={setPlanets} /> {/* Add PlanetManager */}
+      <PlanetManager
+        planets={planets}
+        setPlanets={setPlanets}
+        removePlanetTrail={removePlanetTrail} // Pass the function to PlanetManager
+      /> {/* Add PlanetManager */}
     </div>
   );
 };
