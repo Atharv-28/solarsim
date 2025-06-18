@@ -6,18 +6,16 @@ import Trails from "./trails";
 import Orbits from "./orbits";
 import Planets from "./planets";
 import Toolbox from "./toolbox";
+import PlanetManager from "./planetManager"; // Import the new component
 import ZoomInIcon from "@mui/icons-material/ZoomIn";
 import ZoomOutIcon from "@mui/icons-material/ZoomOut";
 import CropFreeIcon from "@mui/icons-material/CropFree";
 
 import useOrbitAnimation from "./orbitAnimation";
-import useTrailManager from "../utils/trailManager";
+import TrailManager from "../utils/trailManager";
 import { CANVAS_CENTER, EARTH_ORBITAL_PERIOD } from "../utils/constants";
-import {
-  TransformWrapper,
-  TransformComponent,
-  useControls,
-} from "react-zoom-pan-pinch";
+import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
+import initialPlanets from "../utils/planets"; // Import the initial planets
 
 const Canvas = () => {
   const [hoveredPlanet, setHoveredPlanet] = useState(null); // State to track hovered planet
@@ -27,6 +25,7 @@ const Canvas = () => {
   const [displaySpeed, setDisplaySpeed] = useState(1); // 1x by default
   const [elapsedTime, setElapsedTime] = useState(0); // State to track elapsed time
   const [animationKey, setAnimationKey] = useState(0); // Key to reset animation
+  const [planets, setPlanets] = useState(initialPlanets); // State to manage planets dynamically
 
   const BASE_MULTIPLIER = 32; // Base speed multiplier
   const speed = BASE_MULTIPLIER * displaySpeed; // Adjust speed based on user input
@@ -35,10 +34,7 @@ const Canvas = () => {
   const animationTime = useOrbitAnimation(isPlaying, speed, animationKey);
 
   // Custom hook for managing trails
-  const { trails, updateTrails, clearTrails, trailOpacity } = useTrailManager(
-    isPlaying,
-    elapsedTime
-  );
+  const { trails, updateTrails, removeTrail, clearTrails, trailOpacity } = TrailManager(isPlaying, elapsedTime);
 
   // Update elapsed time when animation is playing
   useEffect(() => {
@@ -53,13 +49,20 @@ const Canvas = () => {
   );
 
   // Reset function
-  const handleReset = () => {
-    setAnimationKey((prev) => prev + 1); // Increment animation key to reset
-    setElapsedTime(0); // Reset elapsed time
-    setDisplaySpeed(1); // Reset speed to 1x
-    setIsPlaying(false); // Pause after reset
-    clearTrails(); // Clear trails
+ const handleReset = () => {
+  setAnimationKey((prev) => prev + 1); // Increment animation key to reset
+  setElapsedTime(0); // Reset elapsed time
+  setDisplaySpeed(1); // Reset speed to 1x
+  setIsPlaying(false); // Pause after reset
+  setPlanets(initialPlanets); // Restore default planets
+  clearTrails(); // Clear all trails
+};
+
+   // Function to remove a planet's trail
+  const removePlanetTrail = (planetName) => {
+    removeTrail(planetName); // Use the removeTrail function from TrailManager
   };
+  
 
   return (
     <div className="simulationContainer">
@@ -74,8 +77,8 @@ const Canvas = () => {
       <div className="canvasContainer">
         <TransformWrapper
           initialScale={1}
-          initialPositionX={0}
-          initialPositionY={0}
+          initialPositionX={-CANVAS_CENTER.x + window.innerWidth / 2} // Center horizontally
+          initialPositionY={-CANVAS_CENTER.y + window.innerHeight / 2} // Center vertically
           minScale={0.5}
           maxScale={5}
           wheel={{ disabled: false }}
@@ -85,7 +88,7 @@ const Canvas = () => {
         >
           {({ zoomIn, zoomOut, resetTransform, ...rest }) => (
             <>
-            {/*  ******************      Do Not Modularize zoom-controls          *********************  */}
+              {/* Zoom Controls */}
               <div className="zoom-controls">
                 <button onClick={() => zoomIn()} title="Zoom In">
                   <ZoomInIcon fontSize="small" />
@@ -98,8 +101,7 @@ const Canvas = () => {
                 </button>
               </div>
 
-
-              {/*     Rendering the canvas in transform components for zoom & pan feature     */}
+              {/* Canvas */}
               <TransformComponent>
                 <svg
                   className="canvas"
@@ -110,11 +112,11 @@ const Canvas = () => {
                     setMousePos({ x: e.clientX, y: e.clientY })
                   } // Update mouse position for tooltip
                 >
-                  <Sun /> // sun
-                  <Trails trails={trails} trailOpacity={trailOpacity} /> //
-                  trails
-                  <Orbits /> // orbits
-                  <Planets // planets
+                  <Sun />
+                  <Trails trails={trails} trailOpacity={trailOpacity} />
+                  <Orbits planets={planets} /> {/* Pass planets dynamically */}
+                  <Planets
+                    planets={planets} // Pass planets dynamically
                     elapsedTime={elapsedTime}
                     setHoveredPlanet={setHoveredPlanet}
                     setSelectedPlanet={setSelectedPlanet}
@@ -134,6 +136,11 @@ const Canvas = () => {
           daysElapsed={daysElapsed}
         />
       </div>
+      <PlanetManager
+        planets={planets}
+        setPlanets={setPlanets}
+        removePlanetTrail={removePlanetTrail} // Pass the function to PlanetManager
+      /> {/* Add PlanetManager */}
     </div>
   );
 };

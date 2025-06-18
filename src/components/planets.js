@@ -1,15 +1,14 @@
 import React, { useEffect } from "react";
-import planets from "../utils/planets";
 import { CANVAS_CENTER } from "../utils/constants";
 
 const Planets = ({
+  planets, // Receive planets dynamically
   elapsedTime,
   setHoveredPlanet,
   setSelectedPlanet,
   updateTrails,
 }) => {
   useEffect(() => {
-    // Update trails only when elapsedTime changes
     planets.forEach((planet) => {
       const orbitalProgress =
         (elapsedTime % planet.orbitalPeriod) / planet.orbitalPeriod;
@@ -21,9 +20,9 @@ const Planets = ({
       const x = cx + rx * Math.cos(angle);
       const y = cy + ry * Math.sin(angle);
 
-      updateTrails(planet.name, { x, y }); // Update trails for the planet
+      updateTrails(planet.name, { x, y }, planet.distance); // Update trails for the planet
     });
-  }, [elapsedTime, updateTrails]); // Only run when elapsedTime changes
+  }, [elapsedTime, planets, updateTrails]); // Only run when elapsedTime changes
 
   return (
     <>

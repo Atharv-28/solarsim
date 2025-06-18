@@ -39,7 +39,7 @@
   }
 
   .planet-image {
-    min-height: 15vh;
-    max-width: 40vw;
+    min-height: 14vh;
+    max-width: 35vw;
   }
 }
