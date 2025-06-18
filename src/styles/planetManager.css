@@ -76,10 +76,11 @@
   background-color: #d74545;
   font-size: 12px;
   padding: 5px 8px;
+  width: 30%;
 }
 
 .planet-manager li button:hover {
-  background-color: #c63434;
+  background-color: #c63434;;
 }
 
 .planet-form {
@@ -105,9 +106,10 @@
 
 .planet-form button {
   margin-top: 10px;
-  padding: 10px;
+  width: 100%;
   background-color: #007bff;
   color: white;
+  align-self: center;
   border: none;
   cursor: pointer;
 }
@@ -118,5 +120,22 @@
 
 
 @media screen and (max-width: 800px) {
-
+    .planet-manager {
+        min-width: 90vw;
+        height: 25vh;
+        padding: 10px;
+        margin: 0;
+        display: flex;
+        gap: 20px;
+        flex-direction: row !important;
+    }
+    .planet-form{
+        width: 50%;
+    }
+    .planet-list{
+        width: 45%;
+    }
+    .planet-form label, input {
+        font-size: 0.9rem;
+    }
 }

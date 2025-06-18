@@ -44,8 +44,8 @@ const PlanetManager = ({ planets, setPlanets }) => {
 
   return (
     <div className="planet-manager">
-      <h3>Manage Planets</h3>
       <div className="planet-form">
+      <h3>Manage Planets</h3>
         <label>
           Planet Name:
           <input
@@ -106,9 +106,12 @@ const PlanetManager = ({ planets, setPlanets }) => {
             onChange={handleInputChange}
           />
         </label>
-        <button onClick={addPlanet}>Add Planet</button>
+        <button className="add-button" onClick={addPlanet}>
+            Add Planet
+        </button>
       </div>
-      <ul>
+      <ul className="planet-list">
+        <h3>Existing Planets</h3>
         {planets.map((planet) => (
           <li key={planet.name}>
             {planet.name}{" "}
