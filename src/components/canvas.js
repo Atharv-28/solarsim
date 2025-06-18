@@ -49,13 +49,14 @@ const Canvas = () => {
   );
 
   // Reset function
-  const handleReset = () => {
-    setAnimationKey((prev) => prev + 1); // Increment animation key to reset
-    setElapsedTime(0); // Reset elapsed time
-    setDisplaySpeed(1); // Reset speed to 1x
-    setIsPlaying(false); // Pause after reset
-    clearTrails(); // Clear trails
-  };
+ const handleReset = () => {
+  setAnimationKey((prev) => prev + 1); // Increment animation key to reset
+  setElapsedTime(0); // Reset elapsed time
+  setDisplaySpeed(1); // Reset speed to 1x
+  setIsPlaying(false); // Pause after reset
+  setPlanets(initialPlanets); // Restore default planets
+  clearTrails(); // Clear all trails
+};
 
    // Function to remove a planet's trail
   const removePlanetTrail = (planetName) => {
