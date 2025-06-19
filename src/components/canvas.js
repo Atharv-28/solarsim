@@ -63,7 +63,14 @@ const Canvas = () => {
     removeTrail(planetName); // Use the removeTrail function from TrailManager
   };
   
-
+ // Function to update a planet's details
+  const updatePlanet = (planetName, updatedPlanet) => {
+    setPlanets((prev) =>
+      prev.map((planet) =>
+        planet.name === planetName ? { ...planet, ...updatedPlanet } : planet
+      )
+    );
+  };
   return (
     <div className="simulationContainer">
       <div className="tooltipContainer">
@@ -72,6 +79,7 @@ const Canvas = () => {
           x={mousePos.x}
           y={mousePos.y}
           planet={hoveredPlanet || selectedPlanet}
+          updatePlanet={updatePlanet} // Pass the updatePlanet function
         />
       </div>
       <div className="canvasContainer">
