@@ -1,5 +1,6 @@
 import React from "react";
 import "../styles/tooltip.css";
+import planetImg from "../assets/planet.png"; 
 
 const Tooltip = ({ x, y, planet }) => {
   if (!planet) return null;
@@ -11,7 +12,7 @@ const Tooltip = ({ x, y, planet }) => {
 
   return (
     <div className="tooltip" style={style}>
-      <img src={planet.img || "https://customplanettx.com/cdn/shop/files/Orange_and_purple_fbafe2c0-f952-4652-b231-6a570f1f1dce.png?v=1723840469"}  alt={planet.name} className="planet-image" />
+      <img src={planet.img || planetImg}  alt={planet.name} className="planet-image" />
       <div>
         <strong>{planet.name}</strong>
         <div>Distance: {planet.distance} units</div>
