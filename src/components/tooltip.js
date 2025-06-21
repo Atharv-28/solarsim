@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import "../styles/tooltip.css";
 import planetImg from "../assets/planet.png";
+import EditIcon from '@mui/icons-material/Edit';
 
 const Tooltip = ({ x, y, planet, updatePlanet }) => {
   const [isEditing, setIsEditing] = useState(false); // State to toggle edit mode
@@ -17,7 +18,13 @@ const Tooltip = ({ x, y, planet, updatePlanet }) => {
     const { name, value } = e.target;
     setEditedPlanet((prev) => ({
       ...prev,
-      [name]: name === "radius" || name === "distance" || name === "orbitalPeriod" || name === "eccentricity" ? parseFloat(value) : value,
+      [name]:
+        name === "radius" ||
+        name === "distance" ||
+        name === "orbitalPeriod" ||
+        name === "eccentricity"
+          ? parseFloat(value)
+          : value,
     }));
   };
 
@@ -28,7 +35,11 @@ const Tooltip = ({ x, y, planet, updatePlanet }) => {
 
   return (
     <div className="tooltip" style={style}>
-      <img src={planet.img || planetImg} alt={planet.name} className="planet-image" />
+      <img
+        src={planet.img || planetImg}
+        alt={planet.name}
+        className="planet-image"
+      />
       {isEditing ? (
         <div>
           <strong>Edit {planet.name}</strong>
@@ -93,12 +104,16 @@ const Tooltip = ({ x, y, planet, updatePlanet }) => {
         </div>
       ) : (
         <div>
-          <strong>{planet.name}</strong>
+          <div className="tooltip-header">
+            <strong>{planet.name}</strong>
+            <button className="edit-button" onClick={() => setIsEditing(true)}>
+              <EditIcon fontSize="small" />
+            </button>
+          </div>
           <div>Distance: {planet.distance} units</div>
           <div>Orbital Period: {planet.orbitalPeriod} days</div>
           <div>Eccentricity: {planet.eccentricity}</div>
           <div>Radius: {planet.radius}</div>
-          <button onClick={() => setIsEditing(true)}>Edit</button>
         </div>
       )}
     </div>
