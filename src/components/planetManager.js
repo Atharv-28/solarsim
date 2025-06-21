@@ -46,7 +46,7 @@ const PlanetManager = ({ planets, setPlanets, removePlanetTrail }) => {
   return (
     <div className="planet-manager">
       <div className="planet-form">
-      <h3>Manage Planets</h3>
+        <h3>Manage Planets</h3>
         <label>
           Planet Name:
           <input

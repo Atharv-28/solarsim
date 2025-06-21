@@ -75,6 +75,10 @@
   align-items: center;
 }
 
+.planet-list{
+  width: 100%;
+}
+
 .planet-manager li button {
   background-color: #d74545;
   font-size: 12px;
