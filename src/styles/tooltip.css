@@ -1,13 +1,10 @@
 .tooltip {
-  /*position: absolute;
-  transform: translateY(75%);
-*/
-  background-color: #fff;
-  color: #000;
+  background-color: #1e1e2f;
+  color: #fff;
   padding: 8px 12px;
   border-radius: 8px;
   font-size: 13px;
-  z-index: 1;
+  z-index: 10;
 
   display: flex;
   flex-direction: column;
@@ -20,13 +17,100 @@
   max-width: 20vw;
 }
 
+.tooltip-header{
+  font-weight: bold;
+  font-size: 16px;
+  margin-bottom: 8px;
+  display: flex;
+  justify-content: start;
+  align-items: center;
+}
+
+.edit-button {
+  color: #fff;
+  border: none;
+  background-color: transparent;
+  border-radius: 50px;
+  cursor: pointer;
+  position: relative;
+  right: -7vw;
+}
+
+.tooltip-content {
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  margin-left: 5px;
+  justify-content: center;
+}
+
+.tooltip-content-edit {
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  margin-left: 5px;
+  justify-content: center;
+  max-height: 50vh; /* Limit height for edit mode */
+  overflow-y: auto; /* Enable vertical scrolling */
+}
+
+label {
+  width: 80%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.7rem;
+  color: black;
+}
+ input {
+  font-size: 0.7rem;
+  width: 40%;  
+ }
+
+ .tooltip-edit{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  color: #fff;
+  margin-top: 5px;
+ }
+
+.tooltip-edit button {
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.7rem;
+  margin-left: 10px;
+} 
+
+ .tooltip-edit label{
+  color: #fff;
+ }
+
+ .tooltip-input {
+  font-size: 14px;
+  width: 50%;
+  box-sizing: border-box;
+  border-radius: 6px;
+  border: 1px solid #444;
+  background-color: #2b2b40;
+  color: #f1f1f1;
+}
+
 @media screen and (max-width: 600px) {
   .tooltip {
-    /* transform: translateX(-25%);
-    transform: translateY(80%); */
+    width: 90vw;
     font-size: 12px;
     padding: 6px 10px;
     flex-direction: row;
+    z-index: 10;
+    max-height: 25vh;
   }
 
   .planet-image {
@@ -37,14 +121,22 @@
 
 @media screen and (max-width: 800px) {
   .tooltip {
-    /* margin-left: 25%;
-    margin-top: -15vh; */
+    width: 90vw;
+    max-height: 27vh;
     font-size: 12px;
     padding: 6px 10px;
+    z-index: 10;
+    margin-top: 2px;
   }
 
+  .tooltip-content-edit {
+    max-height: 40vh; /* Reduce height for smaller screens */
+    overflow-y: auto; /* Enable vertical scrolling */
+  }
+
+
   .planet-image {
-    min-height: 15vh;
-    max-width: 40vw;
+    min-height: 14vh;
+    max-width: 35vw;
   }
 }

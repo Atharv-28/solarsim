@@ -19,6 +19,24 @@
   animation: spin 3s linear infinite;
 }
 
+.loader-subtext{
+  font-size: 1.2rem;
+  margin-top: 10px;
+  color: #ccc; /* Lighter color for subtext */
+}
+
+.loader-Author{
+  font-size: 1.2rem;
+  text-decoration: none;
+  margin-top: 10px;
+  color: #ccc; 
+  justify-content: end;
+}
+
+.loader-Author a{
+  color: #ccc; /* Lighter color for author link */
+  text-decoration: none;
+}
 /* Loading Animation of the image */
 @keyframes spin {
   0% {

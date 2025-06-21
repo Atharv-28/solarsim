@@ -12,6 +12,8 @@ const Loader = () => {
         />
         <p>Loading...</p>
         <h2 className='loader-text'>Solar-Sim</h2>
+        <p className='loader-subtext'>A Solar System Simulator</p>
+        <p className='loader-Author'>By: <a href="https://github.com/Atharv-28">Atharv Tambekar</a></p>
     </div>
   )
 }

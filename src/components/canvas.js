@@ -1,35 +1,43 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "../styles/canvas.css";
-import planets from "../utils/planets";
 import Tooltip from "./tooltip";
-import OrbitAnimation from "./orbitAnimation";
-import PlayArrowIcon from "@mui/icons-material/PlayArrow";
-import PauseIcon from "@mui/icons-material/Pause";
-import FastForwardIcon from "@mui/icons-material/FastForward";
-import FastRewindIcon from "@mui/icons-material/FastRewind";
-import ReplayIcon from "@mui/icons-material/Replay";
-import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
+import Sun from "./sun";
+import Trails from "./trails";
+import Orbits from "./orbits";
+import Planets from "./planets";
+import Toolbox from "./toolbox";
+import PlanetManager from "./planetManager"; // Import the new component
+import ZoomInIcon from "@mui/icons-material/ZoomIn";
+import ZoomOutIcon from "@mui/icons-material/ZoomOut";
+import CropFreeIcon from "@mui/icons-material/CropFree";
 
-const CANVAS_CENTER = { x: 500, y: 500 }; // Based on viewBox 1000x1000
-const EARTH_ORBITAL_PERIOD = 365; // Earth's orbital period in days
+import useOrbitAnimation from "./orbitAnimation";
+import TrailManager from "../utils/trailManager";
+import { CANVAS_CENTER, EARTH_ORBITAL_PERIOD } from "../utils/constants";
+import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
+import initialPlanets from "../utils/planets"; // Import the initial planets
 
 const Canvas = () => {
-  const [hoveredPlanet, setHoveredPlanet] = useState(null);
-  const [selectedPlanet, setSelectedPlanet] = useState(null);
+  const [hoveredPlanet, setHoveredPlanet] = useState(null); // State to track hovered planet
+  const [selectedPlanet, setSelectedPlanet] = useState(null); // State to track selected planet
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 }); // State to track mouse position for tooltip
   const [isPlaying, setIsPlaying] = useState(true); // State to control animation playback
   const [displaySpeed, setDisplaySpeed] = useState(1); // 1x by default
   const [elapsedTime, setElapsedTime] = useState(0); // State to track elapsed time
   const [animationKey, setAnimationKey] = useState(0); // Key to reset animation
+  const [planets, setPlanets] = useState(initialPlanets); // State to manage planets dynamically
 
-  const BASE_MULTIPLIER = 32; // base speed multiplier   ********keep it high, low speed is quite slow*********
+  const BASE_MULTIPLIER = 32; // Base speed multiplier
   const speed = BASE_MULTIPLIER * displaySpeed; // Adjust speed based on user input
 
   // Custom hook for animation
-  const animationTime = OrbitAnimation(isPlaying, speed, animationKey);
+  const animationTime = useOrbitAnimation(isPlaying, speed, animationKey);
+
+  // Custom hook for managing trails
+  const { trails, updateTrails, removeTrail, clearTrails, trailOpacity } = TrailManager(isPlaying, elapsedTime);
 
   // Update elapsed time when animation is playing
-  React.useEffect(() => {
+  useEffect(() => {
     if (isPlaying) {
       setElapsedTime(animationTime);
     }
@@ -40,19 +48,29 @@ const Canvas = () => {
     (elapsedTime / EARTH_ORBITAL_PERIOD) * EARTH_ORBITAL_PERIOD
   );
 
-  // Event listener to update mouse position
-  const handleMouseMove = (e) => {
-    setMousePos({ x: e.clientX, y: e.clientY });
-  };
-
   // Reset function
-  const handleReset = () => {
-    setAnimationKey((prevKey) => prevKey + 1);
-    setElapsedTime(0);
-    setDisplaySpeed(1);
-    setIsPlaying(true); // auto-play
-  };
+ const handleReset = () => {
+  setAnimationKey((prev) => prev + 1); // Increment animation key to reset
+  setElapsedTime(0); // Reset elapsed time
+  setDisplaySpeed(1); // Reset speed to 1x
+  setIsPlaying(false); // Pause after reset
+  setPlanets(initialPlanets); // Restore default planets
+  clearTrails(); // Clear all trails
+};
 
+   // Function to remove a planet's trail
+  const removePlanetTrail = (planetName) => {
+    removeTrail(planetName); // Use the removeTrail function from TrailManager
+  };
+  
+ // Function to update a planet's details
+  const updatePlanet = (planetName, updatedPlanet) => {
+    setPlanets((prev) =>
+      prev.map((planet) =>
+        planet.name === planetName ? { ...planet, ...updatedPlanet } : planet
+      )
+    );
+  };
   return (
     <div className="simulationContainer">
       <div className="tooltipContainer">
@@ -61,11 +79,14 @@ const Canvas = () => {
           x={mousePos.x}
           y={mousePos.y}
           planet={hoveredPlanet || selectedPlanet}
+          updatePlanet={updatePlanet} // Pass the updatePlanet function
         />
       </div>
       <div className="canvasContainer">
         <TransformWrapper
           initialScale={1}
+          initialPositionX={-CANVAS_CENTER.x + window.innerWidth / 2} // Center horizontally
+          initialPositionY={-CANVAS_CENTER.y + window.innerHeight / 2} // Center vertically
           minScale={0.5}
           maxScale={5}
           wheel={{ disabled: false }}
@@ -73,131 +94,61 @@ const Canvas = () => {
           pinch={{ disabled: false }}
           className="transform-wrapper"
         >
-          {({ zoomIn, zoomOut, resetTransform }) => (
+          {({ zoomIn, zoomOut, resetTransform, ...rest }) => (
             <>
-              {/* Optional: Add Zoom Controls */}
+              {/* Zoom Controls */}
               <div className="zoom-controls">
-                <button onClick={zoomIn}>+</button>
-                <button onClick={zoomOut}>-</button>
-                <button onClick={resetTransform}>Reset View</button>
+                <button onClick={() => zoomIn()} title="Zoom In">
+                  <ZoomInIcon fontSize="small" />
+                </button>
+                <button onClick={() => zoomOut()} title="Zoom Out">
+                  <ZoomOutIcon fontSize="small" />
+                </button>
+                <button onClick={() => resetTransform()} title="Reset View">
+                  <CropFreeIcon fontSize="small" />
+                </button>
               </div>
 
-              <TransformComponent className="transform-wrapper">
+              {/* Canvas */}
+              <TransformComponent>
                 <svg
                   className="canvas"
                   viewBox="0 0 1000 1000"
                   xmlns="http://www.w3.org/2000/svg"
                   onClick={() => setSelectedPlanet(null)} // Deselect when background clicked
+                  onMouseMove={(e) =>
+                    setMousePos({ x: e.clientX, y: e.clientY })
+                  } // Update mouse position for tooltip
                 >
-                  {/* Sun */}
-                  <circle
-                    cx={CANVAS_CENTER.x}
-                    cy={CANVAS_CENTER.y}
-                    r="20"
-                    fill="yellow"
+                  <Sun />
+                  <Trails trails={trails} trailOpacity={trailOpacity} />
+                  <Orbits planets={planets} /> {/* Pass planets dynamically */}
+                  <Planets
+                    planets={planets} // Pass planets dynamically
+                    elapsedTime={elapsedTime}
+                    setHoveredPlanet={setHoveredPlanet}
+                    setSelectedPlanet={setSelectedPlanet}
+                    updateTrails={updateTrails}
                   />
-
-                  {/* Orbits */}
-                  {planets.map((planet) => {
-                    const rx = planet.distance;
-                    const ry = planet.distance * (1 - planet.eccentricity); // Orbit shape
-                    const cx =
-                      CANVAS_CENTER.x + planet.distance * planet.eccentricity; // Focus shift
-                    const cy = CANVAS_CENTER.y;
-
-                    return (
-                      <ellipse
-                        key={`${planet.name}-orbit`}
-                        cx={cx}
-                        cy={cy}
-                        rx={rx}
-                        ry={ry}
-                        fill="none"
-                        stroke="white"
-                        strokeOpacity={0.1}
-                        strokeDasharray="4 4"
-                      />
-                    );
-                  })}
-
-                  {/* Planets */}
-                  {planets.map((planet, index) => {
-                    const orbitalProgress =
-                      (elapsedTime % planet.orbitalPeriod) /
-                      planet.orbitalPeriod;
-                    const angle = orbitalProgress * 2 * Math.PI; // Calculate angle based on elapsed time
-                    const rx = planet.distance;
-                    const ry = planet.distance * (1 - planet.eccentricity); // Orbit shape
-                    const cx =
-                      CANVAS_CENTER.x + planet.distance * planet.eccentricity; // Focus shift
-                    const cy = CANVAS_CENTER.y;
-                    const x = cx + rx * Math.cos(angle);
-                    const y = cy + ry * Math.sin(angle);
-
-                    return (
-                      <circle
-                        key={planet.name}
-                        cx={x}
-                        cy={y}
-                        r={planet.radius}
-                        fill={planet.color}
-                        onMouseEnter={() => setHoveredPlanet(planet)}
-                        onMouseLeave={() => setHoveredPlanet(null)}
-                        onClick={(e) => {
-                          e.stopPropagation(); // Prevents SVG background click from firing
-                          setSelectedPlanet(planet);
-                        }}
-                      />
-                    );
-                  })}
                 </svg>
               </TransformComponent>
             </>
           )}
         </TransformWrapper>
-        {/* below is the Toolbox of all button  */}
-        <div className="toolbox">
-          {/* Reset Button */}
-          <button onClick={handleReset} title="Reset">
-            <ReplayIcon fontSize="small" />
-          </button>
-
-          {/* Display speed to user */}
-          <span style={{ marginLeft: "10px", color: "white" }}>
-            {displaySpeed}x
-          </span>
-
-          {/* Rewind Button */}
-          <button
-            onClick={() => setDisplaySpeed((prev) => Math.max(0.25, prev / 2))} // Dividing speed by 2 to slow down
-            title="Slow Down"
-          >
-            <FastRewindIcon fontSize="small" />
-          </button>
-
-          {/* Play & Pause Button */}
-          <button onClick={() => setIsPlaying(!isPlaying)}>
-            {isPlaying ? (
-              <PauseIcon fontSize="small" />
-            ) : (
-              <PlayArrowIcon fontSize="small" />
-            )}
-          </button>
-
-          {/* Fast Forward Button */}
-          <button
-            onClick={() => setDisplaySpeed((prev) => Math.min(16, prev * 2))} // Multiplying speed by 2
-            title="Speed Up"
-          >
-            <FastForwardIcon fontSize="small" />
-          </button>
-
-          {/* Display elapsed days */}
-          <span style={{ marginLeft: "10px", color: "white" }}>
-            Days: {daysElapsed}
-          </span>
-        </div>
+        <Toolbox
+          isPlaying={isPlaying}
+          setIsPlaying={setIsPlaying}
+          displaySpeed={displaySpeed}
+          setDisplaySpeed={setDisplaySpeed}
+          handleReset={handleReset}
+          daysElapsed={daysElapsed}
+        />
       </div>
+      <PlanetManager
+        planets={planets}
+        setPlanets={setPlanets}
+        removePlanetTrail={removePlanetTrail} // Pass the function to PlanetManager
+      /> {/* Add PlanetManager */}
     </div>
   );
 };

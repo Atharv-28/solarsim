@@ -78,20 +78,21 @@
   position: absolute;
   top: 20px;
   right: 20px;
-  z-index: 1000;
+  z-index: 5;
   display: flex;
   flex-direction: column;
 }
 
 .zoom-controls button {
   margin: 4px;
-  padding: 6px 10px;
+  padding: 6px 5px;
   font-size: 16px;
   background: #444;
   color: white;
   border: none;
   border-radius: 4px;
   cursor: pointer;
+  z-index: 5;
 }
 
 
@@ -110,7 +111,7 @@
 
     .tooltipContainer {
         width: 90vw;
-        height: 22vh;
+        height: 21vh;
     }
 
     .toolbox {
