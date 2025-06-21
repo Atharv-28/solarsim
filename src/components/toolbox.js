@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import PauseIcon from "@mui/icons-material/Pause";
 import FastForwardIcon from "@mui/icons-material/FastForward";
@@ -13,6 +13,21 @@ const Toolbox = ({
   handleReset,
   daysElapsed,
 }) => {
+  // Add event listener for spacebar to toggle play/pause
+  useEffect(() => {
+    const handleKeyDown = (event) => {
+      if (event.code === "Space") {
+        event.preventDefault(); // Prevent default scrolling behavior
+        setIsPlaying((prev) => !prev); // Toggle play/pause
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown); // Cleanup event listener
+    };
+  }, [setIsPlaying]);
+
   return (
     <div className="toolbox">
       <button onClick={handleReset}>
