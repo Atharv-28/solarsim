@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "../styles/tooltip.css";
 import planetImg from "../assets/planet.png";
 import EditIcon from "@mui/icons-material/Edit";
@@ -6,6 +6,13 @@ import EditIcon from "@mui/icons-material/Edit";
 const Tooltip = ({ x, y, planet, updatePlanet }) => {
   const [isEditing, setIsEditing] = useState(false); // State to toggle edit mode
   const [editedPlanet, setEditedPlanet] = useState({ ...planet }); // State to store edited planet details
+
+  // Synchronize editedPlanet state with the planet prop
+  useEffect(() => {
+    if (planet) {
+      setEditedPlanet({ ...planet });
+    }
+  }, [planet]);
 
   if (!planet) return null;
 
@@ -23,7 +30,7 @@ const Tooltip = ({ x, y, planet, updatePlanet }) => {
         name === "distance" ||
         name === "orbitalPeriod" ||
         name === "eccentricity"
-          ? parseFloat(value)
+          ? parseFloat(value) // Convert numeric fields to numbers
           : value,
     }));
   };
@@ -47,10 +54,10 @@ const Tooltip = ({ x, y, planet, updatePlanet }) => {
             <label>
               Distance:
               <input
-              className="tooltip-input"
+                className="tooltip-input"
                 type="number"
                 name="distance"
-                value={editedPlanet.distance}
+                placeholder={planet.distance} // Use placeholder for current value
                 onChange={handleInputChange}
               />
             </label>
@@ -59,10 +66,10 @@ const Tooltip = ({ x, y, planet, updatePlanet }) => {
             <label>
               Orbital Period:
               <input
-              className="tooltip-input"
+                className="tooltip-input"
                 type="number"
                 name="orbitalPeriod"
-                value={editedPlanet.orbitalPeriod}
+                placeholder={planet.orbitalPeriod} // Use placeholder for current value
                 onChange={handleInputChange}
               />
             </label>
@@ -71,11 +78,11 @@ const Tooltip = ({ x, y, planet, updatePlanet }) => {
             <label>
               Eccentricity:
               <input
-              className="tooltip-input"
+                className="tooltip-input"
                 type="number"
                 step="0.01"
                 name="eccentricity"
-                value={editedPlanet.eccentricity}
+                placeholder={planet.eccentricity} // Use placeholder for current value
                 onChange={handleInputChange}
               />
             </label>
@@ -84,10 +91,10 @@ const Tooltip = ({ x, y, planet, updatePlanet }) => {
             <label>
               Radius:
               <input
-              className="tooltip-input"
+                className="tooltip-input"
                 type="number"
                 name="radius"
-                value={editedPlanet.radius}
+                placeholder={planet.radius} // Use placeholder for current value
                 onChange={handleInputChange}
               />
             </label>
@@ -96,10 +103,10 @@ const Tooltip = ({ x, y, planet, updatePlanet }) => {
             <label>
               Name:
               <input
-              className="tooltip-input"
+                className="tooltip-input"
                 type="text"
                 name="name"
-                value={editedPlanet.name}
+                placeholder={planet.name} // Use placeholder for current value
                 onChange={handleInputChange}
               />
             </label>
