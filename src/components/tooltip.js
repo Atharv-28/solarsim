@@ -124,10 +124,10 @@ const Tooltip = ({ x, y, planet, updatePlanet }) => {
               <EditIcon fontSize="inherit" />
             </button>
           </div>
-          <div>Distance: {planet.distance} units</div>
-          <div>Orbital Period: {planet.orbitalPeriod} days</div>
-          <div>Eccentricity: {planet.eccentricity}</div>
-          <div>Radius: {planet.radius}</div>
+          <div>Distance: {editedPlanet.distance} units</div>
+          <div>Orbital Period: {editedPlanet.orbitalPeriod} days</div>
+          <div>Eccentricity: {editedPlanet.eccentricity}</div>
+          <div>Radius: {editedPlanet.radius}</div>
         </div>
       )}
     </div>
