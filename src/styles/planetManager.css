@@ -9,6 +9,9 @@
   box-shadow: 0 0 12px rgba(0, 0, 0, 0.3);
   margin: 20px;
   overflow-y: scroll;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .planet-manager::-webkit-scrollbar {
@@ -127,13 +130,13 @@
         margin: 0;
         display: flex;
         gap: 20px;
-        flex-direction: row !important;
+        flex-direction: column !important;
     }
     .planet-form{
-        width: 50%;
+        width: 90%;
     }
     .planet-list{
-        width: 45%;
+        width: 90%;
     }
     .planet-form label, input {
         font-size: 0.9rem;

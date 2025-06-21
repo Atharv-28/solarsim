@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import "../styles/tooltip.css";
 import planetImg from "../assets/planet.png";
-import EditIcon from '@mui/icons-material/Edit';
+import EditIcon from "@mui/icons-material/Edit";
 
 const Tooltip = ({ x, y, planet, updatePlanet }) => {
   const [isEditing, setIsEditing] = useState(false); // State to toggle edit mode
@@ -41,12 +41,13 @@ const Tooltip = ({ x, y, planet, updatePlanet }) => {
         className="planet-image"
       />
       {isEditing ? (
-        <div>
+        <div className="tooltip-content-edit">
           <strong>Edit {planet.name}</strong>
-          <div>
+          <div className="tooltip-edit">
             <label>
               Distance:
               <input
+              className="tooltip-input"
                 type="number"
                 name="distance"
                 value={editedPlanet.distance}
@@ -54,10 +55,11 @@ const Tooltip = ({ x, y, planet, updatePlanet }) => {
               />
             </label>
           </div>
-          <div>
+          <div className="tooltip-edit">
             <label>
               Orbital Period:
               <input
+              className="tooltip-input"
                 type="number"
                 name="orbitalPeriod"
                 value={editedPlanet.orbitalPeriod}
@@ -65,10 +67,11 @@ const Tooltip = ({ x, y, planet, updatePlanet }) => {
               />
             </label>
           </div>
-          <div>
+          <div className="tooltip-edit">
             <label>
               Eccentricity:
               <input
+              className="tooltip-input"
                 type="number"
                 step="0.01"
                 name="eccentricity"
@@ -77,10 +80,11 @@ const Tooltip = ({ x, y, planet, updatePlanet }) => {
               />
             </label>
           </div>
-          <div>
+          <div className="tooltip-edit">
             <label>
               Radius:
               <input
+              className="tooltip-input"
                 type="number"
                 name="radius"
                 value={editedPlanet.radius}
@@ -88,10 +92,11 @@ const Tooltip = ({ x, y, planet, updatePlanet }) => {
               />
             </label>
           </div>
-          <div>
+          <div className="tooltip-edit">
             <label>
               Name:
               <input
+              className="tooltip-input"
                 type="text"
                 name="name"
                 value={editedPlanet.name}
@@ -99,15 +104,17 @@ const Tooltip = ({ x, y, planet, updatePlanet }) => {
               />
             </label>
           </div>
-          <button onClick={saveChanges}>Save</button>
-          <button onClick={() => setIsEditing(false)}>Cancel</button>
+          <div className="tooltip-edit">
+            <button onClick={saveChanges}>Save</button>
+            <button onClick={() => setIsEditing(false)}>Cancel</button>
+          </div>
         </div>
       ) : (
-        <div>
+        <div className="tooltip-content">
           <div className="tooltip-header">
             <strong>{planet.name}</strong>
             <button className="edit-button" onClick={() => setIsEditing(true)}>
-              <EditIcon fontSize="small" />
+              <EditIcon fontSize="inherit" />
             </button>
           </div>
           <div>Distance: {planet.distance} units</div>
