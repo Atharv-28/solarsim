@@ -113,7 +113,7 @@ const Canvas = () => {
               <TransformComponent>
                 <svg
                   className="canvas"
-                  viewBox="0 0 1000 1000"
+                  viewBox="0 0 1500 1500"
                   xmlns="http://www.w3.org/2000/svg"
                   onClick={() => setSelectedPlanet(null)} // Deselect when background clicked
                   onMouseMove={(e) =>
